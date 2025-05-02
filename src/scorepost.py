@@ -1,10 +1,5 @@
-from ossapi import GameMode, UserLookupKey, ScoreType
+from ossapi import UserLookupKey, ScoreType
 from decimal import Decimal
-
-# todo: 
-#   askInput - robust user input (misinputs + player has no scores on that gamemode)
-#   Scorepost - if the score was modded, the star rating doesn't change it shows it NM
-#   add an if fc to recent play (must check that it wasn't an fc first)
 
 def askInput():
     # dict to define all types of filters and modes
