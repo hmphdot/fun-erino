@@ -2,8 +2,9 @@ from ossapi import GameMode, UserLookupKey, ScoreType
 from decimal import Decimal
 
 # todo: 
-#   robust user input
-#   wasd
+#   askInput - robust user input (misinputs + player has no scores on that gamemode)
+#   Scorepost - if the score was modded, the star rating doesn't change it shows it NM
+#   add an if fc to recent play (must check that it wasn't an fc first)
 
 def askInput():
     # dict to define all types of filters and modes
@@ -11,19 +12,10 @@ def askInput():
         'T': ScoreType.BEST,
         'R': ScoreType.RECENT,
     }
-    mode_types = {
-        'STD': GameMode.OSU,
-        'MANIA': GameMode.MANIA,
-        'CATCH': GameMode.CATCH,
-        'TAIKO': GameMode.TAIKO
-    }
-
-    # below asks user input
-    player = input("Input name of user: ")
-    mode = mode_types.get(input("Input gamemode - STD, MANIA, CATCH, TAIKO: "))
+    
     postType = post_types.get(input("Input filter - T(op play), R(ecent score): "))
     print("Checking that play... \n")
-    return player, postType, mode
+    return postType
 
 def generateScorepost(api, player, filter, modeInput):
     # define all the commonly used data as single words so its easier to gram
