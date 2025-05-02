@@ -1,19 +1,42 @@
 from ossapi import GameMode, UserLookupKey, ScoreType
 from decimal import Decimal
 
-def generateScorepost(api):
-    player = input("Type name of user: ")
-    scoreOffset = int(input("Type which play you want displayed (1 for top play): ")) - 1
-    print("Checking the std play... \n")
+# todo: 
+#   robust user input
+#   wasd
 
-    subject = api.user(user=player, mode=GameMode.OSU, key=UserLookupKey.USERNAME)
-    playList = api.user_scores(user_id=subject.id, type=ScoreType.BEST, include_fails=False, mode=GameMode.OSU, 
-            limit=1, offset=scoreOffset, legacy_only=False)
+def askInput():
+    # dict to define all types of filters and modes
+    post_types = {
+        'T': ScoreType.BEST,
+        'R': ScoreType.RECENT,
+    }
+    mode_types = {
+        'STD': GameMode.OSU,
+        'MANIA': GameMode.MANIA,
+        'CATCH': GameMode.CATCH,
+        'TAIKO': GameMode.TAIKO
+    }
+
+    # below asks user input
+    player = input("Input name of user: ")
+    mode = mode_types.get(input("Input gamemode - STD, MANIA, CATCH, TAIKO: "))
+    postType = post_types.get(input("Input filter - T(op play), R(ecent score): "))
+    print("Checking that play... \n")
+    return player, postType, mode
+
+def generateScorepost(api, player, filter, modeInput):
+    # define all the commonly used data as single words so its easier to gram
+    subject = api.user(user=player, mode=modeInput, key=UserLookupKey.USERNAME)
+    playList = api.user_scores(user_id=subject.id, type=filter, include_fails=False, mode=modeInput, 
+            limit=1, offset=0, legacy_only=False)
     topPlaySet = playList[0].beatmapset
     creator = api.user(user=topPlaySet.user_id, key=UserLookupKey.ID)
 
+    # acc is stored as a float so we have to do some gimmick to turn it into a two place decimal
     acc = Decimal(playList[0].accuracy * 100).quantize(Decimal("1.00"))
 
+    # lots of printing/formatting under this
     print(subject.username, " | ", topPlaySet.artist, " - ", topPlaySet.title, " [", playList[0].beatmap.version, "] +", 
         end="", sep="")
     if len(playList[0].mods) == 1:
