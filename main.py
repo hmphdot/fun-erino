@@ -22,5 +22,8 @@ while True:
             mods, playstyle = recommendationParams()
             recs = findRecommendation(mods, playstyle)
             printRecommendations(recs)
+        case "exit":
+            print("See you next time!")
+            quit()
         case _:
             print("Sorry, I don't know what to do with the above command.")

@@ -5,7 +5,8 @@ commands = {
     '!h': "help",
     '!c': "config",
     '!s': "scorepost",
-    '!r': "recommend"
+    '!r': "recommend",
+    '!x': "exit"
 }
 
 def initApi():
