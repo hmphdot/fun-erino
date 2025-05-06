@@ -10,12 +10,19 @@ see requirements.txt to find all dependencies and their install commands.
 Create interface (or interact with IRC) so its not cli based
 
 ### recommend
-None of this functions it's literally a shell
+input - robustness \
+findRecs - 1. check stats against player input and skill level (add compatibility w/ mods) \
+find a good ratio that weighs aim and speed properly \
+make it work with user gamemode (because we removed input, you have to query it directly now) \
+add more info to printRec (pp, length, etc.)
 
 ### scorepost
 askInput - robust user input (misinputs + player has no scores on that gamemode) \
 If the score was modded, the star rating doesn't change it shows it NM \
-Add an if fc to recent play (must check that it wasn't an fc first)
+Add an if fc to recent play (must check that it wasn't an fc first) \
+add how long ago the play was set (recent) 
 
 ### general
-Currently good!
+be able to change gamemode, rn will take default gamemode of user (before that add confirmation of mode) \
+learn how to make mock data so i dont get banned for using the api too much when testing \ 
+speaking of, remove some of these api calls, there are too many to be efficient

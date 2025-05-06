@@ -1,4 +1,4 @@
-from ossapi import UserLookupKey, ScoreType
+from ossapi import ScoreType
 from decimal import Decimal
 
 def askInput():
@@ -8,17 +8,17 @@ def askInput():
         'R': ScoreType.RECENT,
     }
     
-    postType = post_types.get(input("Input filter - T(op play), R(ecent score): "))
+    postType = post_types.get(input("Input filter - T(op play), R(ecent score): ").upper())
     print("Checking that play... \n")
     return postType
 
-def generateScorepost(api, player, filter, modeInput):
+def generateScorepost(api, subject, filter):
     # define all the commonly used data as single words so its easier to gram
-    subject = api.user(user=player, mode=modeInput, key=UserLookupKey.USERNAME)
-    playList = api.user_scores(user_id=subject.id, type=filter, include_fails=False, mode=modeInput, 
+    playList = api.user_scores(user_id=subject.id, type=filter, include_fails=False, 
             limit=1, offset=0, legacy_only=False)
     topPlaySet = playList[0].beatmapset
-    creator = api.user(user=topPlaySet.user_id, key=UserLookupKey.ID)
+    mapInfo = playList[0].beatmap
+    mapper = topPlaySet.creator
 
     # acc is stored as a float so we have to do some gimmick to turn it into a two place decimal
     acc = Decimal(playList[0].accuracy * 100).quantize(Decimal("1.00"))
@@ -31,13 +31,11 @@ def generateScorepost(api, player, filter, modeInput):
     else:
         for mod in playList[0].mods:
             print(mod.acronym, end="", sep="")
-    print(" (", creator.username, ", ", api.beatmap(beatmap_id=playList[0].beatmap_id,).difficulty_rating, "*) ", 
-        acc, "% ", sep="", end="")
+    print(" (", mapper, ", ", mapInfo.difficulty_rating, "*) ", acc, "% ", sep="", end="")
     if playList[0].accuracy == 1:
         print("SS")
     elif playList[0].statistics.combo_break != None:
         print(playList[0].statistics.miss, "xMiss, ", sep="", end="")
-    elif playList[0].statistics.ok != 0:
+    else:
         print(playList[0].statistics.ok, "x100, ", sep="", end="")
-    print(int(playList[0].pp), "pp, ", playList[0].max_combo, "/", api.beatmap(beatmap_id=playList[0].beatmap_id,).max_combo, 
-        "x", sep="")
+    print(int(playList[0].pp), "pp, ", playList[0].max_combo, "/", mapInfo.max_combo, "x", sep="")

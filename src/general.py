@@ -1,4 +1,4 @@
-from ossapi import Ossapi, GameMode
+from ossapi import Ossapi, UserLookupKey
 from src.config import API_ID, API_SECRET, API_CALLBACK
 
 commands = {
@@ -17,21 +17,15 @@ def initApi():
 
     return Ossapi(client_id, client_secret, callback_url)
 
-def startUpInput():
-    # dict of all mode types
-    mode_types = {
-        'STD': GameMode.OSU,
-        'MANIA': GameMode.MANIA,
-        'CATCH': GameMode.CATCH,
-        'TAIKO': GameMode.TAIKO
-    }
+def startUpInput(api):
     # below asks user input
     name = input("Hi! Welcome to fun-erino, the tillerino ripoff! Please enter your osu! user: ")
-    mode = mode_types.get(input("Input gamemode - STD, MANIA, CATCH, TAIKO: "))
-    print("Thank you! These settings can be changed at any time with the command !c. You can also use !h to " \
+    print("Thank you! The input user can be changed at any time with the command !c. You can also use !h to " \
     "display all available commands.")
+    print("Current gamemode is user's default; support for changing will be added in the future.")
+    subject = api.user(user=name, key=UserLookupKey.USERNAME)
 
-    return name, mode
+    return subject
 
 def printHelp():
     for command in commands:
