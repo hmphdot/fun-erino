@@ -24,7 +24,7 @@ def generateScorepost(api, subject, filter):
     acc = Decimal(playList[0].accuracy * 100).quantize(Decimal("1.00"))
 
     # lots of printing/formatting under this
-    print(subject.username, " | ", topPlaySet.artist, " - ", topPlaySet.title, " [", playList[0].beatmap.version, "] +", 
+    print(subject.username, " | ", topPlaySet.artist, " - ", topPlaySet.title, " [", mapInfo.version, "] +", 
         end="", sep="")
     if len(playList[0].mods) == 1:
         print("NMCL", end="", sep="")

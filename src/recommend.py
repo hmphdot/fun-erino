@@ -31,6 +31,8 @@ def findRecommendation(api, subject, mods, playstyle):
     listOfRecs = [] # of type list(beatmap) - for id
     for i in range(len(searchResultSets)):
         for j in range(len(searchResultSets[i].beatmaps)):
+            # this line is problematic, because it's in the loop it will get called a bunch and slow the program
+            # down. there needs to be a better way to do this using the data from search_beatmapsets
             stats = api.beatmap_attributes(beatmap_id=searchResultSets[i].beatmaps[j].id)
             skillRatio = stats.attributes.aim_difficulty / stats.attributes.speed_difficulty
             if skillRatio > 0: # FIGURE THIS OUT
